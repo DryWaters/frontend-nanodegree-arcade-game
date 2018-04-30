@@ -123,7 +123,7 @@ var Score = function () {
 
 Score.prototype.render = function () {
   ctx.font = 'bold 40px Arial';
-  ctx.fillText('Score: ' + this.score, 0, 120);
+  ctx.fillText(this.score, 0, 120);
 }
 
 Score.prototype.updateScore = function (score) {
@@ -204,7 +204,10 @@ function removeHeart() {
 function gameOver() {
   allEnemies.forEach(function (enemy) {
     enemy.initEnemy();
-  })
+  });
+  gems.forEach(function (gem) {
+    gem.removeGem();
+  });
   stopGame();
 }
 
