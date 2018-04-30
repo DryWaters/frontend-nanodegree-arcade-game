@@ -238,11 +238,18 @@ function resetHearts() {
   hearts = [heart1, heart2, heart3];
 }
 
+function resetGems() {
+  gems.forEach(function (gem) {
+    gem.init();
+  });
+}
+
 function resetGame() {
   score.score = 0;
   player.init();
   document.querySelector('.modal__background').style.display = "none";
   resetHearts();
+  resetGems();
   reset();
 }
 
