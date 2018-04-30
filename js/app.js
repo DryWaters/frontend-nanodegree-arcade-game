@@ -208,11 +208,20 @@ function gameOver() {
   gems.forEach(function (gem) {
     gem.removeGem();
   });
+  document.querySelector('.modal__score').textContent = score.score;
+  document.querySelector('.modal__background').style.display = "block";
   stopGame();
 }
 
 function resetHearts() {
   hearts = [heart1, heart2, heart3];
+}
+
+function resetGame() {
+  score.score = 0;
+  document.querySelector('.modal__background').style.display = "none";
+  resetHearts();
+  reset();
 }
 
 
