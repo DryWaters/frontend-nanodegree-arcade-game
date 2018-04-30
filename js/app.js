@@ -1,100 +1,118 @@
 
 // Enemies our player must avoid
 var Enemy = function () {
-    // Variables applied to each of our instances go here,
-    // we've provided one for you to get started
+  // Variables applied to each of our instances go here,
+  // we've provided one for you to get started
 
-    // The image/sprite for our enemies, this uses
-    // a helper we've provided to easily load images
-    this.enemyStartY = [60, 143, 227];
-    this.enemyStartX = -100;
-    this.sprite = 'images/enemy-bug.png';
-    this.initEnemy();
+  // The image/sprite for our enemies, this uses
+  // a helper we've provided to easily load images
+  this.enemyStartY = [60, 143, 226];
+  this.enemyStartX = -100;
+  this.sprite = 'images/enemy-bug.png';
+  this.initEnemy();
 };
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function (dt) {
-    // You should multiply any movement by the dt parameter
-    // which will ensure the game runs at the same speed for
-    // all computers.
-    this.x += this.speed * dt;
-    if (this.x >= 500) {
-        this.initEnemy();
-    }
+  // You should multiply any movement by the dt parameter
+  // which will ensure the game runs at the same speed for
+  // all computers.
+  this.x += this.speed * dt;
+  if (this.x >= 500) {
+    this.initEnemy();
+  }
+  if(this.hasCollision()) {
+    player.reset();
+  }
 };
 
+// check collision with player and enemy
+Enemy.prototype.hasCollision = function () {
+  if (
+    Math.abs(this.x - player.x) < 60 &&
+    Math.abs(this.y - player.y) < 40
+  ) {
+    return true;
+  }
+}
+
+// Set the enemy starting location and speed
 Enemy.prototype.initEnemy = function () {
-    this.speed = Math.floor(Math.random() * 200) + 200;
-    this.x = (Math.floor(Math.random() * 300)* -1) + this.enemyStartX;
-    this.y = this.enemyStartY[Math.floor(Math.random() * this.enemyStartY.length)];
+  this.speed = Math.floor(Math.random() * 200) + 200;
+  this.x = (Math.floor(Math.random() * 300) * -1) + this.enemyStartX;
+  this.y = this.enemyStartY[Math.floor(Math.random() * this.enemyStartY.length)];
 }
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function () {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function () {
-    this.x = 200;
-    this.y = 375;
-    this.sprite = 'images/char-boy.png';
+  this.x = 202;
+  this.y = 375;
+  this.sprite = 'images/char-boy.png';
 }
 
 Player.prototype.update = function () {
 
 };
 
-Player.prototype.reset = function() {
-    this.x = 200;
-    this.y = 375;
+Player.prototype.reset = function () {
+  this.x = 202;
+  this.y = 375;
 };
 
 Player.prototype.render = function () {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
 Player.prototype.handleInput = function (keyNum) {
-    if (this.y-83 === -40) {
-        this.reset();
-        return;
+  if (this.y < 100) {
+    this.reset();
+    return;
+  }
+  switch (keyNum) {
+    case 'left': {
+      if (this.x > 100) {
+        this.x -= 101;
+      }
+      return;
     }
-    switch (keyNum) {
-        case 'left': {
-            this.x -= 100;
-            return;
-        }
-        case 'right': {
-            this.x += 100;
-            return;
-        }
-        case 'up': {
-            this.y -= 83;
-            return;
-        }
-        case 'down': {
-            this.y += 83;
-            return;
-        }
+    case 'right': {
+      if (this.x < 400) {
+        this.x += 101;
+      }
+      return;
     }
+    case 'up': {
+      this.y -= 83;
+      return;
+    }
+    case 'down': {
+      if (this.y < 300) {
+        this.y += 83;
+      }
+      return;
+    }
+  }
 }
-
-
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function (e) {
-    var allowedKeys = {
-        37: 'left',
-        38: 'up',
-        39: 'right',
-        40: 'down'
-    };
+  var allowedKeys = {
+    37: 'left',
+    38: 'up',
+    39: 'right',
+    40: 'down'
+  };
 
-    player.handleInput(allowedKeys[e.keyCode]);
+  player.handleInput(allowedKeys[e.keyCode]);
 });
 
 
