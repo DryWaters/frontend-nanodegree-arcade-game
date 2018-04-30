@@ -129,6 +129,10 @@ Score.prototype.updateScore = function (score) {
 
 var Gem = function (id) {
   this.id = id;
+  this.init();
+}
+
+Gem.prototype.init = function () {
   this.gemSprites = ['images/gem-blue.png', 'images/gem-green.png', 'images/gem-orange.png'];
   this.sprite = this.gemSprites[Math.floor(Math.random() * this.gemSprites.length)];
   this.x = Math.floor(Math.random() * 5) * 101;
@@ -140,6 +144,9 @@ Gem.prototype.render = function () {
 }
 
 Gem.prototype.update = function () {
+  if (Math.floor(Math.random() * 1000) === 500) {
+    this.init();
+  }
   if (this.hasCollision()) {
     if (this.sprite === 'images/gem-blue.png') {
       score.updateScore(100);
@@ -197,6 +204,13 @@ function removeGem(removeId) {
   gems = gems.filter(function(gem) {
     return gem.id !== removeId;
   });
+}
+
+function initGems() {
+  gem1 = new Gem(1);
+  gem2 = new Gem(2);
+  gem3 = new Gem(3);
+  gems = [gem1, gem2, gem3];
 }
 
 // Now instantiate your objects.
