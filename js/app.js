@@ -7,9 +7,9 @@ var Enemy = function () {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.enemyStartY = [60, 143, 227];
+    this.enemyStartX = -100;
     this.sprite = 'images/enemy-bug.png';
-    this.x = -100;
-    this.y = this.enemyStartY[Math.floor(Math.random() * this.enemyStartY.length)];
+    this.initEnemy();
 };
 
 // Update the enemy's position, required method for game
@@ -18,15 +18,15 @@ Enemy.prototype.update = function (dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    const movement = 200 * dt;
-    this.x += movement;
+    this.x += this.speed * dt;
     if (this.x >= 500) {
-        this.setRandomLocation();
+        this.initEnemy();
     }
 };
 
-Enemy.prototype.setRandomLocation = function () {
-    this.x = -100;
+Enemy.prototype.initEnemy = function () {
+    this.speed = Math.floor(Math.random() * 200) + 200;
+    this.x = (Math.floor(Math.random() * 300)* -1) + this.enemyStartX;
     this.y = this.enemyStartY[Math.floor(Math.random() * this.enemyStartY.length)];
 }
 
@@ -44,8 +44,7 @@ var Player = function () {
     this.sprite = 'images/char-boy.png';
 }
 
-Player.prototype.update = function (dt) {
-
+Player.prototype.update = function () {
 
 };
 
