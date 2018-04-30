@@ -22,7 +22,7 @@ Enemy.prototype.update = function (dt) {
   if (this.x >= 500) {
     this.initEnemy();
   }
-  if(this.hasCollision()) {
+  if (this.hasCollision()) {
     player.reset();
     removeHeart();
   }
@@ -50,6 +50,12 @@ Enemy.prototype.render = function () {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+Enemy.prototype.stopEnemy = function () {
+  this.x = -500;
+  this.y = -500;
+  this.speed = 0;
+}
+
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -72,39 +78,41 @@ Player.prototype.render = function () {
 }
 
 Player.prototype.handleInput = function (keyNum) {
-  switch (keyNum) {
-    case 'left': {
-      if (this.x > 100) {
-        this.x -= 101;
-      }
-      return;
-    }
-    case 'right': {
-      if (this.x < 400) {
-        this.x += 101;
-      }
-      return;
-    }
-    case 'up': {
-      if (this.y < 200) {
-        this.reset();
+  if (gameRunning) {
+    switch (keyNum) {
+      case 'left': {
+        if (this.x > 100) {
+          this.x -= 101;
+        }
         return;
       }
-      this.y -= 83;
-      return;
-    }
-    case 'down': {
-      if (this.y < 400) {
-        this.y += 83;
+      case 'right': {
+        if (this.x < 400) {
+          this.x += 101;
+        }
+        return;
       }
-      return;
+      case 'up': {
+        if (this.y < 200) {
+          this.reset();
+          return;
+        }
+        this.y -= 83;
+        return;
+      }
+      case 'down': {
+        if (this.y < 400) {
+          this.y += 83;
+        }
+        return;
+      }
     }
   }
 }
 
 var Heart = function (x) {
   this.x = x;
-  this.y = -40;
+  this.y = 40;
   this.sprite = 'images/Heart.png'
 }
 
@@ -126,15 +134,19 @@ document.addEventListener('keyup', function (e) {
 });
 
 function removeHeart() {
-  if (hearts.length > 1) {
+  if (hearts.length > 0) {
     hearts.pop();
-  } else {
-    gameOver();
+    if (hearts.length === 0) {
+      gameOver();
+    }
   }
 }
 
 function gameOver() {
-  console.log("game over");
+  allEnemies.forEach(function (enemy) {
+    enemy.stopEnemy();
+  });
+  gameRunning = false;
 }
 
 // Now instantiate your objects.
@@ -151,3 +163,5 @@ var heart3 = new Heart(200);
 var hearts = [heart1, heart2, heart3];
 
 var player = new Player();
+
+var gameRunning = true;
