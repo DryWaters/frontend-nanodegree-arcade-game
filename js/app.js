@@ -58,7 +58,10 @@ Player.prototype.render = function () {
 }
 
 Player.prototype.handleInput = function (keyNum) {
-    console.log('x is ', this.x, 'y is ', this.y);
+    if (this.y-83 === -40) {
+        this.reset();
+        return;
+    }
     switch (keyNum) {
         case 'left': {
             this.x -= 100;
