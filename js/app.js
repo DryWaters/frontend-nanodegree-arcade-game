@@ -24,6 +24,7 @@ Enemy.prototype.update = function (dt) {
   }
   if(this.hasCollision()) {
     player.reset();
+    removeHeart();
   }
 };
 
@@ -59,7 +60,6 @@ var Player = function () {
 }
 
 Player.prototype.update = function () {
-
 };
 
 Player.prototype.reset = function () {
@@ -72,10 +72,6 @@ Player.prototype.render = function () {
 }
 
 Player.prototype.handleInput = function (keyNum) {
-  if (this.y < 100) {
-    this.reset();
-    return;
-  }
   switch (keyNum) {
     case 'left': {
       if (this.x > 100) {
@@ -90,6 +86,10 @@ Player.prototype.handleInput = function (keyNum) {
       return;
     }
     case 'up': {
+      if (this.y < 100) {
+        this.reset();
+        return;
+      }
       this.y -= 83;
       return;
     }
@@ -100,6 +100,16 @@ Player.prototype.handleInput = function (keyNum) {
       return;
     }
   }
+}
+
+var Heart = function (x) {
+  this.x = x;
+  this.y = -40;
+  this.sprite = 'images/Heart.png'
+}
+
+this.Heart.prototype.render = function () {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
 // This listens for key presses and sends the keys to your
@@ -115,6 +125,17 @@ document.addEventListener('keyup', function (e) {
   player.handleInput(allowedKeys[e.keyCode]);
 });
 
+function removeHeart() {
+  if (hearts.length > 1) {
+    hearts.pop();
+  } else {
+    gameOver();
+  }
+}
+
+function gameOver() {
+  console.log("game over");
+}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -123,5 +144,10 @@ var enemy1 = new Enemy();
 var enemy2 = new Enemy();
 var enemy3 = new Enemy();
 var allEnemies = [enemy1, enemy2, enemy3];
+
+var heart1 = new Heart(400);
+var heart2 = new Heart(300)
+var heart3 = new Heart(200);
+var hearts = [heart1, heart2, heart3];
 
 var player = new Player();
