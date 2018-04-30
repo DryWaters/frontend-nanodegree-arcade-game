@@ -119,7 +119,7 @@ var Score = function () {
 }
 
 Score.prototype.render = function () {
-  ctx.font = '48px serif';
+  ctx.font = 'bold 40px Arial';
   ctx.fillText('Score: ' + this.score, 0, 120);
 }
 
