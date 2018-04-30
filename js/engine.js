@@ -24,6 +24,7 @@ var Engine = (function (global) {
     ctx = canvas.getContext('2d'),
     lastTime;
 
+  var isRunning = true;
   canvas.width = 505;
   canvas.height = 683;
   doc.body.appendChild(canvas);
@@ -32,30 +33,37 @@ var Engine = (function (global) {
    * and handles properly calling the update and render methods.
    */
   function main() {
-    /* Get our time delta information which is required if your game
-     * requires smooth animation. Because everyone's computer processes
-     * instructions at different speeds we need a constant value that
-     * would be the same for everyone (regardless of how fast their
-     * computer is) - hurray time!
-     */
-    var now = Date.now(),
-      dt = (now - lastTime) / 1000.0;
+    if (this.isRunning) {
 
-    /* Call our update/render functions, pass along the time delta to
-     * our update function since it may be used for smooth animation.
-     */
-    update(dt);
-    render();
+      /* Get our time delta information which is required if your game
+       * requires smooth animation. Because everyone's computer processes
+       * instructions at different speeds we need a constant value that
+       * would be the same for everyone (regardless of how fast their
+       * computer is) - hurray time!
+       */
+      var now = Date.now(),
+        dt = (now - lastTime) / 1000.0;
 
-    /* Set our lastTime variable which is used to determine the time delta
-     * for the next time this function is called.
-     */
-    lastTime = now;
+      /* Call our update/render functions, pass along the time delta to
+       * our update function since it may be used for smooth animation.
+       */
+      update(dt);
+      render();
 
-    /* Use the browser's requestAnimationFrame function to call this
-     * function again as soon as the browser is able to draw another frame.
-     */
+      /* Set our lastTime variable which is used to determine the time delta
+       * for the next time this function is called.
+       */
+      lastTime = now;
+
+      /* Use the browser's requestAnimationFrame function to call this
+       * function again as soon as the browser is able to draw another frame.
+       */
+    }
     win.requestAnimationFrame(main);
+  }
+
+  function stopGame() {
+    this.isRunning = false;
   }
 
   /* This function does some initial setup that should only occur once,
@@ -164,7 +172,8 @@ var Engine = (function (global) {
    * those sorts of things. It's only called once by the init() method.
    */
   function reset() {
-    // noop
+    this.isRunning = true;
+    console.log(this.isRunning);
   }
 
   /* Go ahead and load all of the images we know we're going to need to
@@ -186,4 +195,6 @@ var Engine = (function (global) {
    * from within their app.js files.
    */
   global.ctx = ctx;
+  global.stopGame = stopGame;
+  global.reset = reset;
 })(this);

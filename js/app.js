@@ -50,12 +50,6 @@ Enemy.prototype.render = function () {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
-Enemy.prototype.stopEnemy = function () {
-  this.x = -500;
-  this.y = -500;
-  this.speed = 0;
-}
-
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -78,7 +72,6 @@ Player.prototype.render = function () {
 }
 
 Player.prototype.handleInput = function (keyNum) {
-  if (gameRunning) {
     switch (keyNum) {
       case 'left': {
         if (this.x > 100) {
@@ -107,7 +100,6 @@ Player.prototype.handleInput = function (keyNum) {
         return;
       }
     }
-  }
 }
 
 var Heart = function (x) {
@@ -116,9 +108,18 @@ var Heart = function (x) {
   this.sprite = 'images/Heart.png'
 }
 
-this.Heart.prototype.render = function () {
+Heart.prototype.render = function () {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
+
+var Score = function () {
+  this.score = 0;
+}
+
+Score.prototype.render = function () {
+  ctx.d
+}
+
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -143,10 +144,7 @@ function removeHeart() {
 }
 
 function gameOver() {
-  allEnemies.forEach(function (enemy) {
-    enemy.stopEnemy();
-  });
-  gameRunning = false;
+  stopGame();
 }
 
 // Now instantiate your objects.
@@ -163,5 +161,3 @@ var heart3 = new Heart(200);
 var hearts = [heart1, heart2, heart3];
 
 var player = new Player();
-
-var gameRunning = true;
