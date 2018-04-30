@@ -204,7 +204,6 @@ function removeHeart() {
 
 function gameOver() {
   let highScore = getHighScore();
-  console.log('high score is', highScore);
   allEnemies.forEach(function (enemy) {
     enemy.initEnemy();
   });
@@ -273,4 +272,7 @@ var localStorage;
 
 if (typeof(Storage) !== 'undefined') {
   localStorage = window.localStorage;
+  if(isNaN(parseInt(localStorage.getItem('highScore')))) {
+    localStorage.setItem('highScore', "0");
+  }
 }
