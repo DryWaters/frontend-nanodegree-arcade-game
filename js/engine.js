@@ -157,6 +157,10 @@ var Engine = (function (global) {
     /* Loop through all of the objects within the allEnemies array and call
      * the render function you have defined.
      */
+
+    gems.forEach(function (gem) {
+      gem.render();
+    });
     allEnemies.forEach(function (enemy) {
       enemy.render();
     });
@@ -166,6 +170,7 @@ var Engine = (function (global) {
       heart.render();
     });
     score.render();
+
   }
 
   /* This function does nothing but it could have been a good place to
@@ -186,7 +191,10 @@ var Engine = (function (global) {
     'images/grass-block.png',
     'images/enemy-bug.png',
     'images/char-boy.png',
-    'images/Heart.png'
+    'images/Heart.png',
+    'images/gem-blue.png',
+    'images/gem-green.png',
+    'images/gem-orange.png'
   ]);
   Resources.onReady(init);
 

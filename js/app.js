@@ -127,6 +127,16 @@ Score.prototype.updateScore = function (score) {
   this.score += score;
 }
 
+var Gem = function () {
+  this.gemSprites = ['images/gem-blue.png', 'images/gem-green.png', 'images/gem-orange.png'];
+  this.sprite = this.gemSprites[Math.floor(Math.random() * this.gemSprites.length)];
+  this.x = Math.floor(Math.random() * 5) * 101;
+  this.y = 134 + Math.floor(Math.random() * 3) * 83;
+}
+
+Gem.prototype.render = function () {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -173,6 +183,11 @@ var heart1 = new Heart(400);
 var heart2 = new Heart(300)
 var heart3 = new Heart(200);
 var hearts = [heart1, heart2, heart3];
+
+var gem1 = new Gem();
+var gem2 = new Gem();
+var gem3 = new Gem();
+var gems = [gem1, gem2, gem3];
 
 var score = new Score();
 var player = new Player();
