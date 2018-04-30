@@ -240,13 +240,14 @@
   }
 
   function createPositiveMessage(score) {
-    document.querySelector('.modal__message').textContent =
-      `Nice!  You got the new High Score! ${score}`;
+    document.querySelector('.modal__message').textContent = `Nice!  You got the new High Score!`;
+    document.querySelector('.modal__highscore').textContent = `High Score:  ${score}`;
   }
 
   function createNegativeMessage(score) {
-    document.querySelector('.modal__message').textContent =
-      `Sorry!  Keep trying!  Current High Score is ${score}`;
+    document.querySelector('.modal__message').textContent = `Sorry!  Keep trying!`;
+    document.querySelector('.modal__highscore').textContent = `High Score:  ${score}`;
+
   }
 
   function resetHearts() {
@@ -277,7 +278,7 @@
   const gem1 = new Gem();
   const gem2 = new Gem();
   const gem3 = new Gem();
-  
+
   global.hearts = [heart1, heart2, heart3];
   global.allEnemies = [enemy1, enemy2, enemy3];
   global.gems = [gem1, gem2, gem3];
