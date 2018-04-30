@@ -64,6 +64,9 @@ Player.prototype.update = function () {
 };
 
 Player.prototype.reset = function () {
+  gems.forEach(function(gem) {
+    gem.init();
+  });
   this.x = 202;
   this.y = 458;
 };
@@ -127,12 +130,13 @@ Score.prototype.updateScore = function (score) {
   this.score += score;
 }
 
-var Gem = function (id) {
-  this.id = id;
+var Gem = function () {
+  this.inPlay = true;
   this.init();
 }
 
 Gem.prototype.init = function () {
+  this.inPlay = true;
   this.gemSprites = ['images/gem-blue.png', 'images/gem-green.png', 'images/gem-orange.png'];
   this.sprite = this.gemSprites[Math.floor(Math.random() * this.gemSprites.length)];
   this.x = Math.floor(Math.random() * 5) * 101;
@@ -144,18 +148,20 @@ Gem.prototype.render = function () {
 }
 
 Gem.prototype.update = function () {
-  if (Math.floor(Math.random() * 1000) === 500) {
-    this.init();
-  }
-  if (this.hasCollision()) {
-    if (this.sprite === 'images/gem-blue.png') {
-      score.updateScore(100);
-    } else if (this.sprite === 'images/gem-green.png') {
-      score.updateScore(200);
-    } else {
-      score.updateScore(50);
+  if (this.inPlay) {
+    if (Math.floor(Math.random() * 1000) === 500) {
+      this.init();
     }
-    removeGem(this.id);
+    if (this.hasCollision()) {
+      if (this.sprite === 'images/gem-blue.png') {
+        score.updateScore(100);
+      } else if (this.sprite === 'images/gem-green.png') {
+        score.updateScore(200);
+      } else {
+        score.updateScore(50);
+      }
+      this.removeGem();
+    }
   }
 }
 
@@ -167,6 +173,12 @@ Gem.prototype.hasCollision = function () {
     return true;
   }
 }
+
+Gem.prototype.removeGem = function () {
+  this.x = 1000;
+  inPlay = false;
+}
+
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function (e) {
@@ -190,7 +202,7 @@ function removeHeart() {
 }
 
 function gameOver() {
-  allEnemies.forEach(function(enemy) {
+  allEnemies.forEach(function (enemy) {
     enemy.initEnemy();
   })
   stopGame();
@@ -200,18 +212,6 @@ function resetHearts() {
   hearts = [heart1, heart2, heart3];
 }
 
-function removeGem(removeId) {
-  gems = gems.filter(function(gem) {
-    return gem.id !== removeId;
-  });
-}
-
-function initGems() {
-  gem1 = new Gem(1);
-  gem2 = new Gem(2);
-  gem3 = new Gem(3);
-  gems = [gem1, gem2, gem3];
-}
 
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
@@ -226,9 +226,9 @@ var heart2 = new Heart(300)
 var heart3 = new Heart(200);
 var hearts = [heart1, heart2, heart3];
 
-var gem1 = new Gem(1);
-var gem2 = new Gem(2);
-var gem3 = new Gem(3);
+var gem1 = new Gem();
+var gem2 = new Gem();
+var gem3 = new Gem();
 var gems = [gem1, gem2, gem3];
 
 var score = new Score();
