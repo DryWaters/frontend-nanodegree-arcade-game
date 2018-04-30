@@ -55,13 +55,14 @@ Enemy.prototype.render = function () {
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function () {
-  this.x = 202;
-  this.y = 458;
   this.sprite = 'images/char-boy.png';
+  this.init();
 }
 
-Player.prototype.update = function () {
-};
+Player.prototype.init = function () {
+  this.x = 202;
+  this.y = 458;
+}
 
 Player.prototype.reset = function () {
   gems.forEach(function(gem) {
@@ -219,6 +220,7 @@ function resetHearts() {
 
 function resetGame() {
   score.score = 0;
+  player.init();
   document.querySelector('.modal__background').style.display = "none";
   resetHearts();
   reset();

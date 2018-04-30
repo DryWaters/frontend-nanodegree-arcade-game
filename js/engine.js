@@ -104,7 +104,6 @@ var Engine = (function (global) {
     gems.forEach(function (gem) {
       gem.update();
     });
-    player.update();
   }
 
   /* This function initially draws the "game level", it will then call
