@@ -6,7 +6,7 @@ var Enemy = function () {
 
   // The image/sprite for our enemies, this uses
   // a helper we've provided to easily load images
-  this.enemyStartY = [60, 143, 226];
+  this.enemyStartY = [143, 226, 309];
   this.enemyStartX = -100;
   this.sprite = 'images/enemy-bug.png';
   this.initEnemy();
@@ -55,7 +55,7 @@ Enemy.prototype.render = function () {
 // a handleInput() method.
 var Player = function () {
   this.x = 202;
-  this.y = 375;
+  this.y = 458;
   this.sprite = 'images/char-boy.png';
 }
 
@@ -64,7 +64,7 @@ Player.prototype.update = function () {
 
 Player.prototype.reset = function () {
   this.x = 202;
-  this.y = 375;
+  this.y = 458;
 };
 
 Player.prototype.render = function () {
@@ -86,7 +86,7 @@ Player.prototype.handleInput = function (keyNum) {
       return;
     }
     case 'up': {
-      if (this.y < 100) {
+      if (this.y < 200) {
         this.reset();
         return;
       }
@@ -94,7 +94,7 @@ Player.prototype.handleInput = function (keyNum) {
       return;
     }
     case 'down': {
-      if (this.y < 300) {
+      if (this.y < 400) {
         this.y += 83;
       }
       return;
