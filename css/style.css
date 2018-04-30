@@ -3,7 +3,7 @@ body {
 }
 
 .modal__background {
-    display: none;
+    display: block;
     position: absolute;
     background-color: white;
     top: 0;

@@ -203,7 +203,7 @@ function removeHeart() {
 }
 
 function gameOver() {
-  let highScore = getHighScore();
+  processHighScore();
   allEnemies.forEach(function (enemy) {
     enemy.initEnemy();
   });
@@ -212,26 +212,37 @@ function gameOver() {
   });
   document.querySelector('.modal__score').textContent = score.score;
   document.querySelector('.modal__background').style.display = "block";
-  document.querySelector('.modal__message').textContent = highScore;
   stopGame();
-  if (localStorage !== undefined) {
-    localStorage.setItem('highScore', ""+highScore);
+}
+
+function processHighScore() {
+  if (localStorage === undefined) {
+    document.querySelector('.modal__message').textContent = 'Sorry, local storage is not enabled';
+    return;
+  }
+
+  let currentHighScore;
+  if (localStorage.getItem('highScore') !== null) {
+    currentHighScore = Number.parseInt(localStorage.getItem('highScore'));
+  } else {
+    currentHighScore = score.score;
+  }
+
+  if (score.score >= currentHighScore) {
+    createPositiveMessage(score.score);
+  } else {
+    createNegativeMessage(currentHighScore);
   }
 }
 
-function getHighScore() {
-  let currentHighScore;
-  console.log('score is ' , score.score);
-  if (localStorage !== undefined && localStorage.getItem('highScore') !== null) {
-    currentHighScore = Number.parseInt(localStorage.getItem('highScore'));
-  } else {
-    return score.score;
-  }
-  if (score.score > currentHighScore) {
-    return score.score;
-  } else {
-    return currentHighScore;
-  }
+function createPositiveMessage(score) {
+  document.querySelector('.modal__message').textContent = 
+    `Nice!  You got the new High Score! ${score}`;
+}
+
+function createNegativeMessage(score) {
+  document.querySelector('.modal__message').textContent = 
+    `Sorry!  Keep trying!  Current High Score is ${score}`;
 }
 
 function resetHearts() {
@@ -274,12 +285,3 @@ var gems = [gem1, gem2, gem3];
 
 var score = new Score();
 var player = new Player();
-
-var localStorage;
-
-if (typeof(Storage) !== 'undefined') {
-  localStorage = window.localStorage;
-  if(isNaN(parseInt(localStorage.getItem('highScore')))) {
-    localStorage.setItem('highScore', "0");
-  }
-}
