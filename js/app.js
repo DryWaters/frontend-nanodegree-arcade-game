@@ -203,6 +203,8 @@ function removeHeart() {
 }
 
 function gameOver() {
+  let highScore = getHighScore();
+  console.log('high score is', highScore);
   allEnemies.forEach(function (enemy) {
     enemy.initEnemy();
   });
@@ -211,7 +213,26 @@ function gameOver() {
   });
   document.querySelector('.modal__score').textContent = score.score;
   document.querySelector('.modal__background').style.display = "block";
+  document.querySelector('.modal__message').textContent = highScore;
   stopGame();
+  if (localStorage !== undefined) {
+    localStorage.setItem('highScore', ""+highScore);
+  }
+}
+
+function getHighScore() {
+  let currentHighScore;
+  console.log('score is ' , score.score);
+  if (localStorage !== undefined && localStorage.getItem('highScore') !== null) {
+    currentHighScore = Number.parseInt(localStorage.getItem('highScore'));
+  } else {
+    return score.score;
+  }
+  if (score.score > currentHighScore) {
+    return score.score;
+  } else {
+    return currentHighScore;
+  }
 }
 
 function resetHearts() {
@@ -247,3 +268,9 @@ var gems = [gem1, gem2, gem3];
 
 var score = new Score();
 var player = new Player();
+
+var localStorage;
+
+if (typeof(Storage) !== 'undefined') {
+  localStorage = window.localStorage;
+}
