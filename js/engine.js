@@ -165,6 +165,7 @@ var Engine = (function (global) {
     hearts.forEach(function (heart) {
       heart.render();
     });
+    score.render();
   }
 
   /* This function does nothing but it could have been a good place to
@@ -173,7 +174,6 @@ var Engine = (function (global) {
    */
   function reset() {
     this.isRunning = true;
-    console.log(this.isRunning);
   }
 
   /* Go ahead and load all of the images we know we're going to need to

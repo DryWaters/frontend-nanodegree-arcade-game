@@ -34,6 +34,7 @@ Enemy.prototype.hasCollision = function () {
     Math.abs(this.x - player.x) < 60 &&
     Math.abs(this.y - player.y) < 40
   ) {
+    score.updateScore(-5);
     return true;
   }
 }
@@ -72,34 +73,35 @@ Player.prototype.render = function () {
 }
 
 Player.prototype.handleInput = function (keyNum) {
-    switch (keyNum) {
-      case 'left': {
-        if (this.x > 100) {
-          this.x -= 101;
-        }
-        return;
+  switch (keyNum) {
+    case 'left': {
+      if (this.x > 100) {
+        this.x -= 101;
       }
-      case 'right': {
-        if (this.x < 400) {
-          this.x += 101;
-        }
-        return;
-      }
-      case 'up': {
-        if (this.y < 200) {
-          this.reset();
-          return;
-        }
-        this.y -= 83;
-        return;
-      }
-      case 'down': {
-        if (this.y < 400) {
-          this.y += 83;
-        }
-        return;
-      }
+      return;
     }
+    case 'right': {
+      if (this.x < 400) {
+        this.x += 101;
+      }
+      return;
+    }
+    case 'up': {
+      if (this.y < 200) {
+        score.updateScore(10);
+        this.reset();
+        return;
+      }
+      this.y -= 83;
+      return;
+    }
+    case 'down': {
+      if (this.y < 400) {
+        this.y += 83;
+      }
+      return;
+    }
+  }
 }
 
 var Heart = function (x) {
@@ -117,7 +119,12 @@ var Score = function () {
 }
 
 Score.prototype.render = function () {
-  ctx.d
+  ctx.font = '48px serif';
+  ctx.fillText('Score: ' + this.score, 0, 120);
+}
+
+Score.prototype.updateScore = function (score) {
+  this.score += score;
 }
 
 
@@ -144,7 +151,14 @@ function removeHeart() {
 }
 
 function gameOver() {
+  allEnemies.forEach(function(enemy) {
+    enemy.initEnemy();
+  })
   stopGame();
+}
+
+function resetHearts() {
+  hearts = [heart1, heart2, heart3];
 }
 
 // Now instantiate your objects.
@@ -160,4 +174,5 @@ var heart2 = new Heart(300)
 var heart3 = new Heart(200);
 var hearts = [heart1, heart2, heart3];
 
+var score = new Score();
 var player = new Player();
