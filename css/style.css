@@ -47,11 +47,6 @@ body {
   margin: 10px;
 }
 
-.modal__gems__container {
-  display:flex;
-  justify-content: space-evenly;
-}
-
 .modal__gems {
   width: 40px;
 }
@@ -65,10 +60,9 @@ body {
   padding: 10px;
 }
 
-/* .modal__button:hover {
-  color: white;
-} */
-
+/*
+* Used for random button colors
+*/
 .green-gem:hover {
   color: white;
   background-color: #1d8940;
