@@ -2,8 +2,12 @@ body {
   text-align: center;
 }
 
+/*
+* Modal Styles
+*/
+
 .modal__background {
-  display: block;
+  display: none;
   position: absolute;
   background-color: black;
   top: 0;
@@ -23,9 +27,24 @@ body {
 
 .modal__header {
   font-style: Arial;
-  font-size: 50px;
+  font-size: 5em;
   font-weight: bold;
   margin: 0;
+  text-transform: uppercase;
+}
+
+.modal__message {
+  margin-bottom: 0;
+}
+
+.modal__score {
+  font-size: 1.5em;
+  margin: 10px;
+}
+
+.modal__highscore {
+  font-size: 2em;
+  margin: 10px;
 }
 
 .modal__gems__container {
@@ -35,4 +54,35 @@ body {
 
 .modal__gems {
   width: 40px;
+}
+
+.modal__button {
+  margin-top: 10px;
+  font-size: 2em;
+  border: 1px solid white;
+  background-color: white; 
+  border-radius: 10px;
+  padding: 10px;
+}
+
+/* .modal__button:hover {
+  color: white;
+} */
+
+.green-gem:hover {
+  color: white;
+  background-color: #1d8940;
+  box-shadow: 5px 5px #1d8940;
+}
+
+.blue-gem:hover {
+  color: white;
+  background-color: #2145e3;
+  box-shadow: 5px 5px #2145e3;
+}
+
+.orange-gem:hover {
+  color: white;
+  background-color: #e37623;
+  box-shadow: 5px 5px #e37623;
 }

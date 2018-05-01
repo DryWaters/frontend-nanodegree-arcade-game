@@ -2,7 +2,6 @@
 
 ; (function (global) {
 
-
   // Enemies our player must avoid
   var Enemy = function () {
     // Variables applied to each of our instances go here,
@@ -227,7 +226,7 @@
     gems.forEach(function (gem) {
       gem.removeGem();
     });
-    document.querySelector('.modal__score').textContent = score.score;
+    document.querySelector('.modal__score').textContent = `Final Score: ${score.score}`;
     document.querySelector('.modal__background').style.display = "block";
     displayGems();
     stopGame();
@@ -309,3 +308,11 @@
   global.resetGame = resetGame;
 
 })(this);
+
+(function randomButtonColor () {
+  let button = document.querySelector('.modal__button');
+  button.addEventListener('mouseover', function(event) {
+    const colors = ['orange', 'blue', 'green'];
+    this.className = `${colors[Math.floor(Math.random() * colors.length)]}-gem modal__button`;
+  });
+})();
