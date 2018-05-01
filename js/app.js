@@ -124,6 +124,16 @@
 
   var Score = function () {
     this.score = 0;
+    this.greenGems = 0;
+    this.blueGems = 0;
+    this.orangeGems = 0;
+  }
+
+  Score.prototype.init = function () {
+    this.score = 0;
+    this.greenGems = 0;
+    this.blueGems = 0;
+    this.orangeGems = 0;
   }
 
   Score.prototype.render = function () {
@@ -159,10 +169,13 @@
       }
       if (this.hasCollision()) {
         if (this.sprite === 'images/gem-blue.png') {
+          score.blueGems++;
           score.updateScore(100);
         } else if (this.sprite === 'images/gem-green.png') {
+          score.greenGems++;
           score.updateScore(200);
         } else {
+          score.orangeGems++;
           score.updateScore(50);
         }
         this.removeGem();
@@ -216,7 +229,14 @@
     });
     document.querySelector('.modal__score').textContent = score.score;
     document.querySelector('.modal__background').style.display = "block";
+    displayGems();
     stopGame();
+  }
+
+  function displayGems() {
+    document.querySelector('.modal__gems__green').textContent = score.greenGems;
+    document.querySelector('.modal__gems__blue').textContent = score.blueGems;
+    document.querySelector('.modal__gems__orange').textContent = score.orangeGems;
   }
 
   function processHighScore() {
@@ -263,6 +283,7 @@
   function resetGame() {
     score.score = 0;
     player.init();
+    score.init();
     document.querySelector('.modal__background').style.display = "none";
     resetHearts();
     resetGems();
