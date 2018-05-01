@@ -1,6 +1,73 @@
+'use strict';
 
 // IIFE to hide from global scope
-;(function (global) {
+; (function (global) {
+
+    // Window constants
+    const RIGHT_EDGE_OF_SCREEN = 500;
+    const HALF_BLOCK_WIDTH = 60;
+    const HALF_BLOCK_HEIGHT = 40;
+    const BLOCK_WIDTH = 101;
+    const BLOCK_HEIGHT = 83;
+    const NUM_ROWS = 3;
+    const NUM_COLS = 5;
+  
+    // Enemy constants
+    const ENEMY_BASE_SPEED = 200;
+    const ENEMY_START_X = -100;
+    const ENEMY_START_Y = [143, 226, 309];
+    const ENEMY_RANDOM_X = 300;
+  
+    // Player constants
+    const PLAYER_START_X = 202;
+    const PLAYER_START_Y = 458;
+  
+    // Heart constants
+    const HEART_START_Y = 40;
+    const HEART_START_X = [400, 300, 200];
+  
+    // Gem constants
+    const GEM_RANDOMNESS = 1000;
+    const GEM_OFFSET = 134;
+  
+    // Point contants
+    const POINT_GOAL = 10;
+    const POINT_COLLISION = -5;
+    const POINT_GREEN = 200;
+    const POINT_BLUE = 100;
+    const POINT_ORANGE = 50;
+  
+    // Score constants
+    const SCORE_X = 0;
+    const SCORE_Y = 120;
+  
+  // Common properties:
+  // x, y, and sprite name
+  // Common functions: 
+  // render and collision detection
+  var Entity = function ({ x, y, sprite }) {
+    this.x = x;
+    this.y = y;
+    this.sprite = sprite;
+  };
+
+  // Common render method for all Entity objects
+  Entity.prototype.render = function () {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  };
+
+  // check for collisions between entities
+  // by checking the absolute difference between
+  // the two entities is less than half the width/height 
+  // of a block size
+  Entity.prototype.hasCollision = function (otherEntity) {
+    if (
+      Math.abs(this.x - otherEntity.x) < HALF_BLOCK_WIDTH &&
+      Math.abs(this.y - otherEntity.y) < HALF_BLOCK_HEIGHT
+    ) {
+      return true;
+    }
+  };
 
   // Enemies our player must avoid
   var Enemy = function () {
@@ -8,11 +75,17 @@
     // these values are the constant Y values
     // that are equal to the values of the
     // rock blocks
-    this.enemyStartY = [143, 226, 309];
-    this.enemyStartX = -100;
-    this.sprite = 'images/enemy-bug.png';
-    this.initEnemy();
+    this.speed = Math.floor(Math.random() * ENEMY_BASE_SPEED) + ENEMY_BASE_SPEED;
+
+    let x = (Math.floor(Math.random() * ENEMY_RANDOM_X) * -1) + ENEMY_START_X;
+    let y = ENEMY_START_Y[Math.floor(Math.random() * ENEMY_START_Y.length)];
+
+    Entity.call(this, { x, y, sprite: 'images/enemy-bug.png' });
   };
+
+  // Attach the Enemy as a sublcass of Entity
+  Enemy.prototype = Object.create(Entity.prototype);
+  Enemy.prototype.constructor = Enemy;
 
   // Parameter: dt, a time delta between ticks
   Enemy.prototype.update = function (dt) {
@@ -20,71 +93,45 @@
 
     // if enemy runs off the screen
     // then reset themselves back to the left
-    if (this.x >= 500) {
-      this.initEnemy();
+    if (this.x >= RIGHT_EDGE_OF_SCREEN) {
+      this.reset();
     }
+
     // if player collides remove a heart
+    // subtract 5 points, reset gems,
     // and reset them back to beginning
-    if (this.hasCollision()) {
+    if (this.hasCollision(player)) {
+      score.updateScore(POINT_COLLISION);
       player.reset();
+      gems.forEach(function(gem) {
+        gem.reset();
+      });
       removeHeart();
     }
   };
 
-  // check collision with player and enemy
-  // by finding the absolute difference between
-  // the two characters which sould be  
-  // less than half the width/height of a block
-  Enemy.prototype.hasCollision = function () {
-    if (
-      Math.abs(this.x - player.x) < 60 &&
-      Math.abs(this.y - player.y) < 40
-    ) {
-      score.updateScore(-5);
-      return true;
-    }
-  }
-
   // Set the enemy random starting location and speed
-  Enemy.prototype.initEnemy = function () {
-    // the base speed is 200
-    this.speed = Math.floor(Math.random() * 200) + 200;
-    
-    // multiple by -1 to move the enemies slightly off the screen
-    this.x = (Math.floor(Math.random() * 300) * -1) + this.enemyStartX;
-    this.y = this.enemyStartY[Math.floor(Math.random() * this.enemyStartY.length)];
-  }
-
-  // Draw the enemy on the screen
-  Enemy.prototype.render = function () {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  Enemy.prototype.reset = function () {
+    this.speed = Math.floor(Math.random() * ENEMY_BASE_SPEED) + ENEMY_BASE_SPEED;
+    this.x = (Math.floor(Math.random() * ENEMY_RANDOM_X) * -1) + ENEMY_START_X;
+    this.y = ENEMY_START_Y[Math.floor(Math.random() * ENEMY_START_Y.length)];
   };
 
-  // Player object
+  // Player object that moves around the screen
   var Player = function () {
-    this.sprite = 'images/char-boy.png';
-    this.init();
-  }
+    Entity.call(this, { x: PLAYER_START_X, y: PLAYER_START_Y, sprite: 'images/char-boy.png' });
+  };
 
-  // reset the player if they collide
-  // with enemy or make it to the end
-  Player.prototype.init = function () {
-    this.x = 202;
-    this.y = 458;
-  }
+  // Attach the Player as a subclass of Entity
+  Player.prototype = Object.create(Entity.prototype);
+  Player.prototype.constructor = Player;
 
   // if player makes it to the end
-  // then recreate the gems
+  // or gets hit by an enemy
   Player.prototype.reset = function () {
-    gems.forEach(function (gem) {
-      gem.init();
-    });
-    this.init();
+    this.x = PLAYER_START_X;
+    this.y = PLAYER_START_Y;
   };
-
-  Player.prototype.render = function () {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  }
 
   // handles the keyboard input
   // adding 10 to the score if they
@@ -105,7 +152,10 @@
       }
       case 'up': {
         if (this.y < 200) {
-          score.updateScore(10);
+          score.updateScore(POINT_GOAL);
+          gems.forEach(function(gem) {
+            gem.reset();
+          });
           this.reset();
           return;
         }
@@ -119,49 +169,18 @@
         return;
       }
     }
-  }
+  };
 
   // Heart object used to display
   // the number of lives the player has left
   // They start with 3 lives.
   var Heart = function (x) {
-    this.x = x;
-    this.y = 40;
-    this.sprite = 'images/Heart.png'
-  }
+    Entity.call(this, { x, y: HEART_START_Y, sprite: 'images/heart.png' });
+  };
 
-  Heart.prototype.render = function () {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  }
-
-  // Score object used to display
-  // the players current score
-  // This object also keeps track of how 
-  // many gems they have collected.
-  var Score = function () {
-    this.score = 0;
-    this.greenGems = 0;
-    this.blueGems = 0;
-    this.orangeGems = 0;
-  }
-
-  // reset function if player wants
-  // to play again
-  Score.prototype.init = function () {
-    this.score = 0;
-    this.greenGems = 0;
-    this.blueGems = 0;
-    this.orangeGems = 0;
-  }
-
-  Score.prototype.render = function () {
-    ctx.font = 'bold 40px Arial';
-    ctx.fillText(this.score, 0, 120);
-  }
-
-  Score.prototype.updateScore = function (score) {
-    this.score += score;
-  }
+  // Attach the Heart as a sublcass of Entity
+  Heart.prototype = Object.create(Entity.prototype);
+  Heart.prototype.constructor = Heart;
 
   // Gems object that is used to
   // increase the players score
@@ -169,20 +188,23 @@
   // around randomly
   var Gem = function () {
     this.inPlay = true;
-    this.init();
-  }
-
-  Gem.prototype.init = function () {
-    this.inPlay = true;
     this.gemSprites = ['images/gem-blue.png', 'images/gem-green.png', 'images/gem-orange.png'];
-    this.sprite = this.gemSprites[Math.floor(Math.random() * this.gemSprites.length)];
-    this.x = Math.floor(Math.random() * 5) * 101;
-    this.y = 134 + Math.floor(Math.random() * 3) * 83;
-  }
+    let sprite = this.gemSprites[Math.floor(Math.random() * this.gemSprites.length)];
+    let x = Math.floor(Math.random() * NUM_COLS) * BLOCK_WIDTH;
+    let y = GEM_OFFSET + Math.floor(Math.random() * NUM_ROWS) * BLOCK_HEIGHT;
+    Entity.call(this, {x, y, sprite});
+  };
 
-  Gem.prototype.render = function () {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-  }
+  // Attach the Gem as a sublcass of Entity
+  Gem.prototype = Object.create(Entity.prototype);
+  Gem.prototype.constructor = Gem;
+
+  Gem.prototype.reset = function () {
+    this.inPlay = true;
+    this.sprite = this.gemSprites[Math.floor(Math.random() * this.gemSprites.length)];
+    this.x = Math.floor(Math.random() * NUM_COLS) * BLOCK_WIDTH;
+    this.y = GEM_OFFSET + Math.floor(Math.random() * NUM_ROWS) * BLOCK_HEIGHT;
+  };
 
   // Gems are randomly moved if 1/1000th chance
   // on every update
@@ -195,42 +217,60 @@
   // updating the "inPlay" property
   Gem.prototype.update = function () {
     if (this.inPlay) {
-      if (Math.floor(Math.random() * 1000) === 500) {
-        this.init();
+      if (Math.floor(Math.random() * GEM_RANDOMNESS) === 0) {
+        this.reset();
       }
-      if (this.hasCollision()) {
+      if (this.hasCollision(player)) {
         if (this.sprite === 'images/gem-blue.png') {
           score.blueGems++;
-          score.updateScore(100);
+          score.updateScore(POINT_BLUE);
         } else if (this.sprite === 'images/gem-green.png') {
           score.greenGems++;
-          score.updateScore(200);
+          score.updateScore(POINT_GREEN);
         } else {
           score.orangeGems++;
-          score.updateScore(50);
+          score.updateScore(POINT_ORANGE);
         }
         this.removeGem();
       }
     }
-  }
-
-  // if player picks up the gem
-  // do not allow it to reappear
-  Gem.prototype.hasCollision = function () {
-    if (
-      Math.abs(this.x - player.x) < 50 &&
-      Math.abs(this.y - player.y) < 41
-    ) {
-      return true;
-    }
-  }
+  };
 
   // remove the gem by moving it off the page
   // instead of recreating the object
   Gem.prototype.removeGem = function () {
     this.x = 1000;
     this.inPlay = false;
-  }
+  };
+
+  // Score object used to display
+  // the players current score
+  // This object also keeps track of how 
+  // many gems they have collected.
+  var Score = function () {
+    this.score = 0;
+    this.greenGems = 0;
+    this.blueGems = 0;
+    this.orangeGems = 0;
+  };
+
+  // reset function if player wants
+  // to play again
+  Score.prototype.reset = function () {
+    this.score = 0;
+    this.greenGems = 0;
+    this.blueGems = 0;
+    this.orangeGems = 0;
+  };
+
+  Score.prototype.render = function () {
+    ctx.font = 'bold 40px Arial';
+    ctx.fillText(this.score, SCORE_X, SCORE_Y);
+  };
+
+  Score.prototype.updateScore = function (score) {
+    this.score += score;
+  };
 
   // This listens for key presses and sends the keys to your
   // Player.handleInput() method. You don't need to modify this.
@@ -263,7 +303,7 @@
   function gameOver() {
     processHighScore();
     allEnemies.forEach(function (enemy) {
-      enemy.initEnemy();
+      enemy.reset();
     });
     gems.forEach(function (gem) {
       gem.removeGem();
@@ -302,7 +342,7 @@
 
     if (score.score >= currentHighScore) {
       createPositiveMessage(score.score);
-      localStorage.setItem('highScore', ""+score.score);
+      localStorage.setItem('highScore', "" + score.score);
     } else {
       createNegativeMessage(currentHighScore);
     }
@@ -324,21 +364,13 @@
     hearts = [heart1, heart2, heart3];
   }
 
-  // resets the gems when player wants to play again
-  function resetGems() {
-    gems.forEach(function (gem) {
-      gem.init();
-    });
-  }
-
   // starts the game back when player wants to play again
   function resetGame() {
     score.score = 0;
-    player.init();
-    score.init();
+    player.reset();
+    score.reset();
     document.querySelector('.modal__background').style.display = "none";
     resetHearts();
-    resetGems();
     reset();
   }
 
@@ -348,9 +380,9 @@
   const enemy3 = new Enemy();
 
   // The argument is the Heart's X value
-  const heart1 = new Heart(400);
-  const heart2 = new Heart(300);
-  const heart3 = new Heart(200);
+  const heart1 = new Heart(HEART_START_X[0]);
+  const heart2 = new Heart(HEART_START_X[1]);
+  const heart3 = new Heart(HEART_START_X[2]);
   const gem1 = new Gem();
   const gem2 = new Gem();
   const gem3 = new Gem();
@@ -370,9 +402,9 @@
 // attach a listener that will randomly change the background
 // color of the modal on hover
 // (colors are the colors of the gems)
-(function randomButtonColor () {
+(function randomButtonColor() {
   let button = document.querySelector('.modal__button');
-  button.addEventListener('mouseover', function(event) {
+  button.addEventListener('mouseover', function (event) {
     const colors = ['orange', 'blue', 'green'];
     this.className = `${colors[Math.floor(Math.random() * colors.length)]}-gem modal__button`;
   });
