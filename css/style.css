@@ -1,29 +1,33 @@
 body {
-    text-align: center;
+  text-align: center;
 }
 
 .modal__background {
-    display: block;
-    position: absolute;
-    background-color: white;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+  display: block;
+  position: absolute;
+  background-color: black;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
 }
 
 .modal__container {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
+  color: white;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .modal__header {
-    font-style: Arial;
-    font-size: 50px;
-    font-weight: bold;
-    margin: 0;
+  font-style: Arial;
+  font-size: 50px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.modal__image {
+  position: relative;
 }
