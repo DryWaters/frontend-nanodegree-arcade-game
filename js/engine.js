@@ -24,6 +24,7 @@ var Engine = (function (global) {
     ctx = canvas.getContext('2d'),
     lastTime;
 
+  // Added boolean to check if screen should update
   var isRunning = true;
   canvas.width = 505;
   canvas.height = 683;
