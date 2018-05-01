@@ -265,7 +265,7 @@
   }
 
   function createNegativeMessage(score) {
-    document.querySelector('.modal__message').textContent = `Sorry!  Keep trying!`;
+    document.querySelector('.modal__message').textContent = `Keep trying!!`;
     document.querySelector('.modal__highscore').textContent = `High Score:  ${score}`;
 
   }
