@@ -254,6 +254,7 @@
 
     if (score.score >= currentHighScore) {
       createPositiveMessage(score.score);
+      localStorage.setItem('highScore', ""+score.score);
     } else {
       createNegativeMessage(currentHighScore);
     }
