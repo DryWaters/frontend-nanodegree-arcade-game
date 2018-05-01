@@ -35,6 +35,7 @@ body {
 
 .modal__message {
   margin-bottom: 0;
+  font-size: 1.5em;
 }
 
 .modal__score {
