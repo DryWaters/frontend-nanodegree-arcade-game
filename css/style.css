@@ -30,9 +30,9 @@ body {
 
 .modal__gems__container {
   display:flex;
+  justify-content: space-evenly;
 }
 
 .modal__gems {
   width: 40px;
-  padding: 10px;
 }
