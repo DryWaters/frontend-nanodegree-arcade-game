@@ -28,6 +28,11 @@ body {
   margin: 0;
 }
 
-.modal__image {
-  position: relative;
+.modal__gems__container {
+  display:flex;
+}
+
+.modal__gems {
+  width: 40px;
+  padding: 10px;
 }
