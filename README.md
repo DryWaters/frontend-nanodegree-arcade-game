@@ -17,11 +17,15 @@ Phil the Bug is trying to reach the cool waters of the pond, but the bustling la
 </p>
 
 ## Instructions
-The object of the game is to make it across the board without getting touched by any of the fast moving ladybugs.  To increase your score collect the gems that randomly appear around the board.  To have the gems reappear, you must make it across to the pond.  Movement of Phil the Bug is done through the keyboard arrow keys.
+The object of the game is to:
+1. Make it across the board without getting touched by any of the fast moving ladybugs.  
+2. Increase your score by collecting gems that randomly appear around the board.  
+3. Gems reappear when you make it across the pond.
+4. Movement of Phil the Bug is done through the keyboard arrow keys.
 
-* ![Green Gem](https://github.com/DryWaters/frontend-nanodegree-arcade-game/blob/master/images/gem-green.png "Green Gem") is worth 200 points!
-* ![Blue Gem](https://github.com/DryWaters/frontend-nanodegree-arcade-game/blob/master/images/gem-blue.png "Blue Gem") is worth 100 points!
-* ![Orange Gem](https://github.com/DryWaters/frontend-nanodegree-arcade-game/blob/master/images/gem-orange.png "Orange Gem") is worth 50 points!
+![Green Gem](https://github.com/DryWaters/frontend-nanodegree-arcade-game/blob/master/images/gem-green.png "Green Gem") 200 points!
+![Blue Gem](https://github.com/DryWaters/frontend-nanodegree-arcade-game/blob/master/images/gem-blue.png "Blue Gem") 100 points!
+![Orange Gem](https://github.com/DryWaters/frontend-nanodegree-arcade-game/blob/master/images/gem-orange.png "Orange Gem") 50 points!
 
 ## Getting Started
 All files are included in the project repository.  To get the game started on your own computer, just clone/download the zip file from this repository to your computer and open the index.html file.  The index.html expects the directories to be:
